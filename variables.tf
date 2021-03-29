@@ -17,11 +17,11 @@ variable "parameter_write" {
   default     = []
 }
 
-variable "enabled" {
-  type        = bool
-  default     = true
-  description = "Set to `false` to prevent the module from creating and accessing any resources"
-}
+//variable "enabled" {
+//  type        = bool
+//  default     = true
+//  description = "Set to `false` to prevent the module from creating and accessing any resources"
+//}
 
 variable "split_delimiter" {
   type        = string
