@@ -52,3 +52,14 @@ output "arn_list" {
   description = "List of ARNs created"
   value       = local.arn_list
 }
+
+
+output "aws_region" {
+  description = "ssm deployment region"
+  value       = data.aws_region.current.name
+}
+
+output "account_id" {
+  description = "ssm deployment account id"
+  value       = data.aws_caller_identity.current.account_id
+}
