@@ -33,7 +33,7 @@ variable "ssm_depends_on" {
 }
 
 variable "deploy_ssm_parameter" {
-  description = "feature flag, true or false"
+  description = "Feature flag, true or false"
   default     = true
   type        = bool
 }

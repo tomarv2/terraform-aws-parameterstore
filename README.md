@@ -148,7 +148,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_deploy_ssm_parameter"></a> [deploy\_ssm\_parameter](#input\_deploy\_ssm\_parameter) | feature flag, true or false | `bool` | `true` | no |
+| <a name="input_deploy_ssm_parameter"></a> [deploy\_ssm\_parameter](#input\_deploy\_ssm\_parameter) | Feature flag, true or false | `bool` | `true` | no |
 | <a name="input_kms_alias"></a> [kms\_alias](#input\_kms\_alias) | The ARN of a KMS key used to encrypt and decrypt SecretString values | `string` | `"aws/ssm"` | no |
 | <a name="input_parameter_write"></a> [parameter\_write](#input\_parameter\_write) | List of maps with the parameter values to write to SSM Parameter Store | `list(map(string))` | `[]` | no |
 | <a name="input_prjid"></a> [prjid](#input\_prjid) | Name of the project/stack e.g: mystack, nifieks, demoaci. Should not be changed after running 'tf apply' | `string` | n/a | yes |
