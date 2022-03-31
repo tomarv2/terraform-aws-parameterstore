@@ -4,15 +4,24 @@ resource "aws_ssm_parameter" "default" {
   name        = tolist(var.parameter_write)[count.index]["name"]
   description = lookup(tolist(var.parameter_write)[count.index], "description", tolist(var.parameter_write)[count.index]["name"])
 
-  # lookup     -> retrieves the value of a single element from a map, given its key.
-  #               If the given key does not exkms_aliasist, a the given default value is returned instead.
-  # tolist     -> converts its argument to a list value.
-  type   = lookup(tolist(var.parameter_write)[count.index], "type", "SecureString")
-  tier   = lookup(var.parameter_write[count.index], "tier", "Standard")
-  key_id = lookup(tolist(var.parameter_write)[count.index], "type", "SecureString") == "SecureString" && length(var.kms_alias) > 0 ? var.kms_alias : ""
-  value  = tolist(var.parameter_write)[count.index]["value"]
+  type      = lookup(tolist(var.parameter_write)[count.index], "type", "SecureString")
+  tier      = lookup(var.parameter_write[count.index], "tier", "Standard")
+  key_id    = lookup(tolist(var.parameter_write)[count.index], "type", "SecureString") == "SecureString" && length(var.kms_alias) > 0 ? var.kms_alias : ""
+  value     = tolist(var.parameter_write)[count.index]["value"]
+  overwrite = lookup(var.parameter_write[count.index], "overwrite", false)
 
-  tags = merge(local.shared_tags)
+  allowed_pattern   = var.allowed_pattern
+  tags              = var.custom_tags != null ? merge(var.custom_tags, local.shared_tags) : merge(local.shared_tags)
 
-  depends_on = [var.ssm_depends_on]
+  # This module assumes that value is changed manually.
+  # using AWS Management Console or AWS CLI, should prevent plan diff occurring.
+  #
+  # That's because we want to manage SSM Parameter settings with Terraform.
+  # But, we do not want to manage the value itself (especially in case of sensitive value) with Terraform.
+  # In other words, sensitive value that is written into the tf file should not be managed by the Version Control System.
+  #
+  # NOTE: If you want to reference the value itself in Terraform code, then use aws_ssm_parameter of Data Source.
+  lifecycle {
+    ignore_changes = [value]
+  }
 }

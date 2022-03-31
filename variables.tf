@@ -26,14 +26,20 @@ variable "kms_alias" {
   description = "The ARN of a KMS key used to encrypt and decrypt SecretString values"
 }
 
-variable "ssm_depends_on" {
-  description = "ssm depends on"
-  default     = null
-  type        = string
-}
-
 variable "deploy_ssm_parameter" {
   description = "Feature flag, true or false"
   default     = true
   type        = bool
+}
+
+variable "custom_tags" {
+  type        = any
+  description = "Extra custom tags"
+  default     = null
+}
+
+variable "allowed_pattern" {
+  default     = ""
+  type        = string
+  description = "A regular expression used to validate the parameter value."
 }
