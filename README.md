@@ -37,7 +37,7 @@ terraform destroy -var='teamid=tryme' -var='prjid=project1'
 
 #### Option 2:
 
-##### Recommended method (stores remote state in S3 using `prjid` and `teamid` to create directory structure):
+##### Recommended method (stores remote state in remote backend(S3,  Azure storage, or Google bucket) using `prjid` and `teamid` to create directory structure):
 
 - Create python 3.8+ virtual environment
 ```
@@ -138,19 +138,18 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_ssm_parameter.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_allowed_pattern"></a> [allowed\_pattern](#input\_allowed\_pattern) | A regular expression used to validate the parameter value. | `string` | `""` | no |
+| <a name="input_custom_tags"></a> [custom\_tags](#input\_custom\_tags) | Extra custom tags | `any` | `null` | no |
 | <a name="input_deploy_ssm_parameter"></a> [deploy\_ssm\_parameter](#input\_deploy\_ssm\_parameter) | Feature flag, true or false | `bool` | `true` | no |
 | <a name="input_kms_alias"></a> [kms\_alias](#input\_kms\_alias) | The ARN of a KMS key used to encrypt and decrypt SecretString values | `string` | `"aws/ssm"` | no |
 | <a name="input_parameter_write"></a> [parameter\_write](#input\_parameter\_write) | List of maps with the parameter values to write to SSM Parameter Store | `list(map(string))` | `[]` | no |
 | <a name="input_prjid"></a> [prjid](#input\_prjid) | Name of the project/stack e.g: mystack, nifieks, demoaci. Should not be changed after running 'tf apply' | `string` | n/a | yes |
 | <a name="input_split_delimiter"></a> [split\_delimiter](#input\_split\_delimiter) | A delimiter for splitting and joining lists together for normalising the output | `string` | `"~^~"` | no |
-| <a name="input_ssm_depends_on"></a> [ssm\_depends\_on](#input\_ssm\_depends\_on) | ssm depends on | `string` | `null` | no |
 | <a name="input_teamid"></a> [teamid](#input\_teamid) | Name of the team/group e.g. devops, dataengineering. Should not be changed after running 'tf apply' | `string` | n/a | yes |
 
 ## Outputs
@@ -161,7 +160,5 @@ No modules.
 | <a name="output_arn_map"></a> [arn\_map](#output\_arn\_map) | A map of the names and ARNs created |
 | <a name="output_map"></a> [map](#output\_map) | A map of the names and values created |
 | <a name="output_names"></a> [names](#output\_names) | A list of all of the parameter names |
-| <a name="output_ssm_account_id"></a> [ssm\_account\_id](#output\_ssm\_account\_id) | ssm deployment account id |
-| <a name="output_ssm_aws_region"></a> [ssm\_aws\_region](#output\_ssm\_aws\_region) | ssm deployment region |
 | <a name="output_values"></a> [values](#output\_values) | A list of all of the parameter values |
 <!-- END_TF_DOCS -->

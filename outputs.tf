@@ -35,7 +35,7 @@ output "names" {
 
 output "values" {
   description = "A list of all of the parameter values"
-  value       = local.value_list
+  value       = nonsensitive(local.value_list)
 }
 
 output "map" {
@@ -51,15 +51,4 @@ output "arn_map" {
 output "arn_list" {
   description = "List of ARNs created"
   value       = local.arn_list
-}
-
-
-output "ssm_aws_region" {
-  description = "ssm deployment region"
-  value       = data.aws_region.current.name
-}
-
-output "ssm_account_id" {
-  description = "ssm deployment account id"
-  value       = data.aws_caller_identity.current.account_id
 }
