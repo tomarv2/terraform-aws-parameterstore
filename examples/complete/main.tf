@@ -17,16 +17,27 @@ module "ssm_parameter" {
   parameter_write = [
     {
       name        = "/security/demo"
-      value       = "WORLD"
-      type        = "String"
-      overwrite   = "true"
+      value       = "helloworld"
       description = "hello world string"
     },
     {
       name        = "/security/demo-secured"
       value       = "helloworld"
       type        = "SecureString"
-      overwrite   = "true"
+      description = "hello world secured string"
+    }
+  ]
+
+  parameter_write_ignore_values = [
+    {
+      name        = "/security/demo1"
+      value       = "helloworld"
+      description = "hello world string"
+    },
+    {
+      name        = "/security/demo-secured1"
+      value       = "helloworld"
+      type        = "SecureString"
       description = "hello world secured string"
     }
   ]
