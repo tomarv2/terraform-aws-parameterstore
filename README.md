@@ -138,6 +138,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_ssm_parameter.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
+| [aws_ssm_parameter.ignore_value_changes](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
 
 ## Inputs
 
@@ -145,9 +146,12 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_allowed_pattern"></a> [allowed\_pattern](#input\_allowed\_pattern) | A regular expression used to validate the parameter value. | `string` | `""` | no |
 | <a name="input_custom_tags"></a> [custom\_tags](#input\_custom\_tags) | Extra custom tags | `any` | `null` | no |
-| <a name="input_deploy_ssm_parameter"></a> [deploy\_ssm\_parameter](#input\_deploy\_ssm\_parameter) | Feature flag, true or false | `bool` | `true` | no |
+| <a name="input_ignore_value_changes"></a> [ignore\_value\_changes](#input\_ignore\_value\_changes) | Whether to ignore future external changes in paramater values | `map` | `{}` | no |
 | <a name="input_kms_alias"></a> [kms\_alias](#input\_kms\_alias) | The ARN of a KMS key used to encrypt and decrypt SecretString values | `string` | `"aws/ssm"` | no |
+| <a name="input_kms_arn"></a> [kms\_arn](#input\_kms\_arn) | The ARN of a KMS key used to encrypt and decrypt SecretString values | `string` | `""` | no |
 | <a name="input_parameter_write"></a> [parameter\_write](#input\_parameter\_write) | List of maps with the parameter values to write to SSM Parameter Store | `list(map(string))` | `[]` | no |
+| <a name="input_parameter_write_defaults"></a> [parameter\_write\_defaults](#input\_parameter\_write\_defaults) | Parameter write default settings | `map(any)` | <pre>{<br>  "allowed_pattern": null,<br>  "data_type": "text",<br>  "description": null,<br>  "overwrite": "false",<br>  "tier": "Standard",<br>  "type": "String"<br>}</pre> | no |
+| <a name="input_parameter_write_ignore_values"></a> [parameter\_write\_ignore\_values](#input\_parameter\_write\_ignore\_values) | Feature flag, true or false | `list(map(string))` | `[]` | no |
 | <a name="input_prjid"></a> [prjid](#input\_prjid) | Name of the project/stack e.g: mystack, nifieks, demoaci. Should not be changed after running 'tf apply' | `string` | n/a | yes |
 | <a name="input_split_delimiter"></a> [split\_delimiter](#input\_split\_delimiter) | A delimiter for splitting and joining lists together for normalising the output | `string` | `"~^~"` | no |
 | <a name="input_teamid"></a> [teamid](#input\_teamid) | Name of the team/group e.g. devops, dataengineering. Should not be changed after running 'tf apply' | `string` | n/a | yes |
@@ -156,7 +160,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_arn_list"></a> [arn\_list](#output\_arn\_list) | List of ARNs created |
 | <a name="output_arn_map"></a> [arn\_map](#output\_arn\_map) | A map of the names and ARNs created |
 | <a name="output_map"></a> [map](#output\_map) | A map of the names and values created |
 | <a name="output_names"></a> [names](#output\_names) | A list of all of the parameter names |

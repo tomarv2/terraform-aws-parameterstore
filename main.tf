@@ -1,27 +1,38 @@
+locals {
+  parameter_write               = var.ignore_value_changes != {} ? { for e in var.parameter_write : e.name => merge(var.parameter_write_defaults, e) } : {}
+  parameter_write_ignore_values = var.parameter_write_ignore_values != {} ? { for e in var.parameter_write_ignore_values : e.name => merge(var.parameter_write_defaults, e) } : {}
+}
+
 resource "aws_ssm_parameter" "default" {
-  count = var.deploy_ssm_parameter ? length(var.parameter_write) : 0
+  for_each = local.parameter_write
+  name     = each.key
 
-  name        = tolist(var.parameter_write)[count.index]["name"]
-  description = lookup(tolist(var.parameter_write)[count.index], "description", tolist(var.parameter_write)[count.index]["name"])
+  description     = each.value.description
+  type            = each.value.type
+  tier            = each.value.tier
+  key_id          = each.value.type == "SecureString" && length(var.kms_arn) > 0 ? var.kms_arn : ""
+  value           = each.value.value
+  overwrite       = each.value.overwrite
+  allowed_pattern = each.value.allowed_pattern
+  data_type       = each.value.data_type
+}
 
-  type      = lookup(tolist(var.parameter_write)[count.index], "type", "SecureString")
-  tier      = lookup(var.parameter_write[count.index], "tier", "Standard")
-  key_id    = lookup(tolist(var.parameter_write)[count.index], "type", "SecureString") == "SecureString" && length(var.kms_alias) > 0 ? var.kms_alias : ""
-  value     = tolist(var.parameter_write)[count.index]["value"]
-  overwrite = lookup(var.parameter_write[count.index], "overwrite", false)
+resource "aws_ssm_parameter" "ignore_value_changes" {
+  for_each = local.parameter_write_ignore_values
+  name     = each.key
 
-  allowed_pattern   = var.allowed_pattern
-  tags              = var.custom_tags != null ? merge(var.custom_tags, local.shared_tags) : merge(local.shared_tags)
+  description     = each.value.description
+  type            = each.value.type
+  tier            = each.value.tier
+  key_id          = each.value.type == "SecureString" && length(var.kms_arn) > 0 ? var.kms_arn : ""
+  value           = each.value.value
+  overwrite       = each.value.overwrite
+  allowed_pattern = each.value.allowed_pattern
+  data_type       = each.value.data_type
 
-  # This module assumes that value is changed manually.
-  # using AWS Management Console or AWS CLI, should prevent plan diff occurring.
-  #
-  # That's because we want to manage SSM Parameter settings with Terraform.
-  # But, we do not want to manage the value itself (especially in case of sensitive value) with Terraform.
-  # In other words, sensitive value that is written into the tf file should not be managed by the Version Control System.
-  #
-  # NOTE: If you want to reference the value itself in Terraform code, then use aws_ssm_parameter of Data Source.
   lifecycle {
-    ignore_changes = [value]
+    ignore_changes = [
+      value,
+    ]
   }
 }

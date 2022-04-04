@@ -1,29 +1,16 @@
 # Splitting and joining, and then compacting a list to get a normalised list
 locals {
-  name_list = compact(
-    concat(
-      split(
-        var.split_delimiter,
-        join(var.split_delimiter, aws_ssm_parameter.default.*.name)
-      )
-    )
-  )
+  name_list = compact(concat(keys(local.parameter_write), keys(local.parameter_write_ignore_values)))
 
   value_list = compact(
     concat(
-      split(
-        var.split_delimiter,
-        join(var.split_delimiter, aws_ssm_parameter.default.*.value)
-      )
+      [for p in aws_ssm_parameter.default : p.value], [for p in aws_ssm_parameter.ignore_value_changes : p.value]
     )
   )
 
   arn_list = compact(
     concat(
-      split(
-        var.split_delimiter,
-        join(var.split_delimiter, aws_ssm_parameter.default.*.arn)
-      )
+      [for p in aws_ssm_parameter.default : p.arn], [for p in aws_ssm_parameter.ignore_value_changes : p.arn]
     )
   )
 }
@@ -35,20 +22,17 @@ output "names" {
 
 output "values" {
   description = "A list of all of the parameter values"
-  value       = nonsensitive(local.value_list)
+  value       = local.value_list
+  sensitive   = true
 }
 
 output "map" {
   description = "A map of the names and values created"
   value       = zipmap(local.name_list, local.value_list)
+  sensitive   = true
 }
 
 output "arn_map" {
   description = "A map of the names and ARNs created"
   value       = zipmap(local.name_list, local.arn_list)
-}
-
-output "arn_list" {
-  description = "List of ARNs created"
-  value       = local.arn_list
 }
