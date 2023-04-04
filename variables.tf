@@ -1,13 +1,3 @@
-variable "teamid" {
-  description = "Name of the team/group e.g. devops, dataengineering. Should not be changed after running 'tf apply'"
-  type        = string
-}
-
-variable "prjid" {
-  description = "Name of the project/stack e.g: mystack, nifieks, demoaci. Should not be changed after running 'tf apply'"
-  type        = string
-}
-
 variable "split_delimiter" {
   type        = string
   default     = "~^~"
@@ -32,7 +22,7 @@ variable "parameter_write" {
   default     = []
 }
 
-variable "custom_tags" {
+variable "extra_tags" {
   type        = any
   description = "Extra custom tags"
   default     = null
@@ -64,7 +54,7 @@ variable "parameter_write_defaults" {
 }
 
 variable "ignore_value_changes" {
-  type        = map
+  type        = map(any)
   description = "Whether to ignore future external changes in paramater values"
   default     = {}
 }

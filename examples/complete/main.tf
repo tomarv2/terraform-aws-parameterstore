@@ -2,7 +2,7 @@ terraform {
   required_version = ">= 1.0.1"
   required_providers {
     aws = {
-      version = "~> 3.74"
+      version = "~> 4.61"
     }
   }
 }
@@ -16,29 +16,17 @@ module "ssm_parameter" {
 
   parameter_write = [
     {
-      name        = "/security/demo"
-      value       = "helloworld"
-      description = "hello world string"
-    },
-    {
-      name        = "/security/demo-secured"
-      value       = "helloworld"
-      type        = "SecureString"
-      description = "hello world secured string"
+      name        = "demo"
+      value       = "password"
+      description = "demo password"
     }
   ]
 
   parameter_write_ignore_values = [
     {
-      name        = "/security/demo1"
-      value       = "helloworld"
+      name        = "hello"
+      value       = "world"
       description = "hello world string"
-    },
-    {
-      name        = "/security/demo-secured1"
-      value       = "helloworld"
-      type        = "SecureString"
-      description = "hello world secured string"
     }
   ]
   kms_alias = "alias/aws/ssm"
